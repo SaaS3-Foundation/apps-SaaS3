@@ -1,24 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import FormComponent from './FormComponent';
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <div className="App-header">
+      <div className='iconpanel bg-light'>
+        icon
+      </div>
+      <div className='sidepanel border-left border-right'>
+      <div className='flex-column'>
+      <span>Input You Request</span>
+      </div>
+        <FormComponent></FormComponent>
+      </div>
+      <div>
+        data
+      </div>
+      </div>
     </div>
   );
 }
