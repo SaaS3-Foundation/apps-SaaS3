@@ -81,3 +81,8 @@
   /* .ant-select-arrow{
     background-color: #595c76;
   } */
+  .ant-select-dropdown-menu {
+    background: #1F1F26;
+    border: solid 1px #32323a;
+    color: #fff !important;
+    }
