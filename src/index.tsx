@@ -17,3 +17,12 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+// apiSpecifications：{servers:[ {url: string} ], paths:[string: {选项: {parameters: [{
+//                      "in": string,
+//                      "name":string
+//                   },
+//  ]} }] }
+
+// get/post
+// 另外，in 的 value 只能是 "path" | "query" | "header" | "cookie" | "processing";
