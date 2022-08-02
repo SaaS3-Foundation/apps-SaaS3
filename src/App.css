@@ -19,7 +19,7 @@
   overflow: hidden;
   width: 50px;
   user-select: none;
-  min-height: 100vh;
+  height: 100vh;
 }
 
 .bg-light {

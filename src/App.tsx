@@ -1,14 +1,14 @@
 import './App.css';
 import FormComponent from './FormComponent';
 import EditComponent from './EditComponent';
-
+import logo from './img/SaaS3Logo.png';
 function App() {
 
   return (
     <div>
       <div className="App-header">
       <div className='iconpanel bg-light'>
-        icon
+        <img src={logo}></img>
       </div>
       <div className='sidepanel border-left border-right'>
       <div className='flex-column'>
