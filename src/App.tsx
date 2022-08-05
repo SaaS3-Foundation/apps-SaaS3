@@ -1,6 +1,7 @@
 import './App.css';
 import FormComponent from './FormComponent';
 import EditComponent from './EditComponent';
+import EventsGateway from './EventsGateway';
 import logo from './img/SaaS3Logo.png';
 function App() {
 
@@ -18,7 +19,7 @@ function App() {
         <EditComponent></EditComponent>
       </div>
       <div>
-        data
+        <EventsGateway></EventsGateway>
       </div>
       </div>
     </div>

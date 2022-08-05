@@ -8,10 +8,12 @@ import {
   message,
 } from 'antd';
 
+
 const { TextArea } = Input;
 
 
 function EditComponent() {
+
     const [form] = Form.useForm();
     let requestOptions = {
         method: 'POST',
@@ -44,6 +46,7 @@ function EditComponent() {
             
           });
     }
+
     return (
         <Form
         style={{textAlign: 'center'}}
