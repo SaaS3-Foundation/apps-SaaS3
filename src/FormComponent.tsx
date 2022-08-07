@@ -1,6 +1,5 @@
 import './FormComponent.css';
 import axios from 'axios';
-import fetchJsonp from 'fetch-jsonp'
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { InboxOutlined, UploadOutlined } from '@ant-design/icons';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';

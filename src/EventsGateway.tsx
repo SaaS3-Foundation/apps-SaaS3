@@ -1,10 +1,10 @@
-import { io } from 'socket.io';
+import { io } from 'socket.io-client';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
 function EventsGateway() {
 
     let now = 0;
-    const socket = io('http://localhost:3002');
+    const socket = io('http://localhost:3000');
     socket.on('connect', function() {
       console.log('Connected');
     });
@@ -18,3 +18,4 @@ function EventsGateway() {
 
     return <ProgressBar animated now={now} />;
 }
+export default EventsGateway;
