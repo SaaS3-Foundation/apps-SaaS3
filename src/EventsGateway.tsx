@@ -4,7 +4,7 @@ import ProgressBar from 'react-bootstrap/ProgressBar';
 function EventsGateway() {
 
     let now = 0;
-    const socket = io('http://localhost:3000');
+    const socket = io('http://localhost:3002');
     socket.on('connect', function() {
       console.log('Connected');
     });
