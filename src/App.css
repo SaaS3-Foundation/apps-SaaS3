@@ -41,3 +41,7 @@
 .border-right {
   border-right: 1px solid #3f4455 !important;
 }
+
+.ant-steps-vertical.ant-steps-small .ant-steps-item-container .ant-steps-item-title{
+  color:white
+}

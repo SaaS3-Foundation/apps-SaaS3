@@ -18,7 +18,7 @@ function App() {
         {/* <FormComponent></FormComponent> */}
         <EditComponent></EditComponent>
       </div>
-      <div>
+      <div style={{ margin: '4rem', width:'100%', height:'100vh', top:'6rem'}}>
         <EventsGateway></EventsGateway>
       </div>
       </div>
