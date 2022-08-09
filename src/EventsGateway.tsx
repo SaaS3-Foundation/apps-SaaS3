@@ -18,26 +18,26 @@ function EventsGateway() {
     socket.on('status', function(data: any) {
       console.log('status', data);
       now = data.progress;
-      if (data['status'] === 'PENDING'){
+      // if (data['status'] === 'PENDING'){
+      //   setReverse(1);
+      // }
+      if (data['status'] === 'GENERATING_AIRNODE_ADDRESS'){
         setReverse(1);
       }
-      if (data['status'] === 'GENERATING_AIRNODE_ADDRESS'){
+      if (data['status'] === 'GENERATING_REQUESTER_CONTRACT'){
         setReverse(2);
       }
-      if (data['status'] === 'GENERATING_REQUESTER_CONTRACT'){
+      if (data['status'] === 'DEPLOYING_REQUESTER_CONTRACT'){
         setReverse(3);
       }
-      if (data['status'] === 'DEPLOYING_REQUESTER_CONTRACT'){
+      if (data['status'] === 'GENERATING_REQUESTER_CONTRACT'){
         setReverse(4);
       }
-      if (data['status'] === 'GENERATING_REQUESTER_CONTRACT'){
+      if (data['status'] === 'DEPLOYING_REQUESTER_CONTRACT'){
         setReverse(5);
       }
-      if (data['status'] === 'DEPLOYING_REQUESTER_CONTRACT'){
-        setReverse(6);
-      }
       if (data['status'] === 'SPONSORING_REQUESTER_CONTRACT'){
-        setReverse(7);
+        setReverse(6);
       }
     });
     socket.on('disconnect', function() {
@@ -45,7 +45,6 @@ function EventsGateway() {
     });
     return (
       <Steps direction="vertical" size='small' current={reverse} > 
-      <Step title="WAITING" />
       <Step title="PENDING" />
       <Step title="GENERATING_AIRNODE_ADDRESS" />
       <Step title="GENERATING_REQUESTER_CONTRACT" />
