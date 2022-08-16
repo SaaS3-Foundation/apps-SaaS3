@@ -44,7 +44,7 @@ function EventsGateway() {
       console.log('Disconnected');
     });
     return (
-      <Steps direction="vertical" size='small' current={reverse} > 
+      <Steps direction="vertical" size='small' current={reverse}> 
       <Step title="PENDING" />
       <Step title="GENERATING_AIRNODE_ADDRESS" />
       <Step title="GENERATING_REQUESTER_CONTRACT" />

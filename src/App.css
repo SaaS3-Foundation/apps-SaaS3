@@ -5,7 +5,6 @@
 
 .App-header {
   background-color: #222336;
-  min-height: 100vh;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -17,7 +16,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  width: 50px;
+  width: 80px;
   user-select: none;
   height: 100vh;
 }
@@ -29,8 +28,8 @@
 .sidepanel {
   display: flex;
   /* flex-direction: row-reverse; */
-  min-height: 100vh;
-  width: 40%;
+  /* min-height: 100vh; */
+  width: 80vw;
   flex-direction: column;
 }
 
@@ -44,4 +43,15 @@
 
 .ant-steps-vertical.ant-steps-small .ant-steps-item-container .ant-steps-item-title{
   color:white
+}
+
+.panelleft{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 3rem;
+}
+
+.flex-column{
+  padding: 30px;
 }
