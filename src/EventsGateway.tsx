@@ -13,7 +13,7 @@ function EventsGateway() {
     const finish = useRef(null);
 
     let now = 0;
-    const socket = io('http://150.109.145.144:3002');
+    const socket = io('http://localhost:3002');
     socket.on('connect', function() {
       console.log('Connected');
     });
