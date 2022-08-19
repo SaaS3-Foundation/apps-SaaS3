@@ -32,7 +32,7 @@ function EditComponent() {
             // req.open('POST', 'http://localhost:3000/saas3/dapi/submit', true);
             // req.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
             // req.send(data);
-            axios.post('http://localhost:3000/saas3/dapi/submit',requestOptions.body ,{headers:{'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Methods' :'GET, POST' , 'Access-Control-Allow-Origin': '*'}})
+            axios.post('http://150.109.145.144:3000/saas3/dapi/submit',requestOptions.body ,{headers:{'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Methods' :'GET, POST' , 'Access-Control-Allow-Origin': '*'}})
               .then(function (response) {
                 console.log(response);
                 console.log(response['data']['job']);
