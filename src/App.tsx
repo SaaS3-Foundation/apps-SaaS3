@@ -8,7 +8,7 @@ function App() {
     <div>
       <div className="App-header">
       <div className='iconpanel bg-light'>
-        <img src={logo}></img>
+        <img src={logo} onClick={()=>window.location.href='https://saas3.io/marketplace'}></img>
       </div>
       <div className="panelleft" style={{width:'50%', height:"100vh"}}>
         <div style={{display:'flex',flexDirection:"row"}} >
@@ -17,7 +17,7 @@ function App() {
       </div>
       <div className='sidepanel border-left border-right'>
         <div className='flex-column'>
-          <span>Input You Request</span>
+          <span>Input You Oracle Config</span>
         </div>
         <EditComponent></EditComponent>
         </div>

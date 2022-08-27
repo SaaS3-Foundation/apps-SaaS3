@@ -9,24 +9,25 @@ import {
 } from 'antd';
 import {web3Accounts, web3Enable} from "@polkadot/extension-dapp";
 
-
 const { TextArea } = Input;
-const walletConnected = false;
+let walletConnected = false;
+let oracle_submitted = false;
 
 function EditComponent() {
 
-const [accounts, setAccounts] = useRef({});
-const [error, setError] = useRef(null);
+const [account, setAccounts] = useState({});
+const [error, setError] = useState("null");
 
     const connectWallet = async () => {
-      const extensions = await web3Enable('SaaS3 Oracle Launchpad');
+      const extensions = await web3Enable('Oracle Launchpad');
       if (extensions.length === 0) {
-          setError("No extension installed!");
+          message.error("Please install polkadot wallet extension")
           return;
       }
       const accounts = await web3Accounts();
-      setAccounts(accounts);
-      console.log(accounts);
+      setAccounts(accounts[0]['address']);
+      walletConnected = true;
+      message.info("Connect Success");
     };
   
 
@@ -36,28 +37,38 @@ const [error, setError] = useRef(null);
         headers: { 'Content-Type': 'text/plain',
         //  'Access-Control-Allow-Methods' :'GET, POST' , 'Access-Control-Allow-Origin': '*'
         },
-        body: JSON.stringify({ title: 'React POST Request Example' })
+        body: JSON.stringify({ title: 'React POST Request Example'})
     };
 
 
     const onFinish = () => {
         form.validateFields().then((value) => {
-            console.log('onFinish', value);
-            requestOptions.body =  value['content'];
-            console.log(requestOptions);
+
+            try{
+              let requestConfig = JSON.parse(value['content']);
+              requestOptions.body = JSON.stringify(requestConfig); 
+            }catch{
+              message.error('Invalid Oracle Config');
+              return;
+            }
+
+            console.log(requestOptions.body);
             // let req = new XMLHttpRequest();
             // req.open('POST', 'http://localhost:3000/saas3/dapi/submit', true);
             // req.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
             // req.send(data);
-            axios.post('http://localhost:3000/saas3/dapi/submit',requestOptions.body ,{headers:{'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Methods' :'GET, POST' , 'Access-Control-Allow-Origin': '*'}})
+            axios.post('http://rpc.saas3.io:3000/saas3/dapi/submit?address='+account,requestOptions.body ,{headers:{'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Methods' :'GET, POST' , 'Access-Control-Allow-Origin': '*'}})
               .then(function (response) {
-                console.log(response);
-                console.log(response['data']['job']);
-                message.success('Your request have been created successfully, job ID: ' + response['data']['job'], 4);
-                return response;
-              })
-              .catch(function (error) {
-                console.log(error);
+                const res = response['data'];
+                console.log(res);
+                  message.success('Your request have been created successfully, job ID: ' + res['data']['job'], 4);
+                  oracle_submitted = true;
+                  return response;
+              }).catch(function (error) {
+                const err = error['response']['data'];
+                console.log(err);
+                oracle_submitted = false;
+                message.error(err['msg']);
                 return error;
               });
           });

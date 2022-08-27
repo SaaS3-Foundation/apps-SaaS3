@@ -1,12 +1,15 @@
 import { io } from 'socket.io-client';
 // import ProgressBar from 'react-bootstrap/ProgressBar';
-import { Button, Steps } from 'antd';
+import { Button, message, Steps } from 'antd';
 import type { SliderMarks } from 'antd/es/slider';
 import './App.css';
 import { useRef, useState } from 'react';
 import { LoadingOutlined } from '@ant-design/icons';
+import oracle_submitted from './EditComponent';
+
 
 const { Step } = Steps;
+let finished=0;
 
 function EventsGateway() {
     const [reverse, setReverse] = useState(0);
@@ -16,7 +19,9 @@ function EventsGateway() {
     };
 
     let now = 0;
-    const socket = io('http://localhost:3002');
+    console.log('websocket');
+
+    const socket = io('http://rpc.saas3.io:3002');
     socket.on('connect', function() {
       console.log('Connected');
     });
@@ -49,11 +54,17 @@ function EventsGateway() {
       }
       if (data['status'] === 'DONE'){
         setReverse(9);
+        if(finished==0){
+          message.success('Your oracle has been launched, please go to marketplace to share');
+          finished = 1;
+        }
+        finished = 1;
       }
     });
     socket.on('disconnect', function() {
       console.log('Disconnected');
     });
+
     return (
       <Steps direction="vertical" size='small' current={reverse} onChange={(current)=>{
         
