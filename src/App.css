@@ -12,6 +12,10 @@
   color: white;
 }
 
+.iconpanel .anticon{
+  margin-top: 1vh;
+}
+
 .iconpanel{
   display: flex;
   flex-direction: column;

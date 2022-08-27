@@ -17,6 +17,8 @@ function EditComponent() {
 
 const [account, setAccounts] = useState({});
 const [error, setError] = useState("null");
+const [oracleName, setOracleName] = useState('');
+const [creatorName, setCreatorName] = useState('');
 
     const connectWallet = async () => {
       const extensions = await web3Enable('Oracle Launchpad');
@@ -27,7 +29,7 @@ const [error, setError] = useState("null");
       const accounts = await web3Accounts();
       setAccounts(accounts[0]['address']);
       walletConnected = true;
-      message.info("Connect Success");
+      message.success("Connect Success");
     };
   
 
@@ -40,12 +42,32 @@ const [error, setError] = useState("null");
         body: JSON.stringify({ title: 'React POST Request Example'})
     };
 
+    const handleOracleChange =  (event: React.ChangeEvent<HTMLInputElement>) => {
+      setOracleName(event.target.value);
+    };
+
+    const handleCreatorChange =  (event: React.ChangeEvent<HTMLInputElement>) => {
+      setCreatorName(event.target.value);
+    };
+
 
     const onFinish = () => {
         form.validateFields().then((value) => {
 
+           if (oracleName.length == 0){
+            message.error('Oracle Name cannot be Empty!');
+            return;
+           }
+
+           if (creatorName.length == 0){
+            message.error('Creator Name cannot be Empty!');
+            return;
+           }
+
             try{
               let requestConfig = JSON.parse(value['content']);
+              requestConfig['title'] = oracleName;
+              requestConfig['creator'] = creatorName;
               requestOptions.body = JSON.stringify(requestConfig); 
             }catch{
               message.error('Invalid Oracle Config');
@@ -53,6 +75,7 @@ const [error, setError] = useState("null");
             }
 
             console.log(requestOptions.body);
+
             // let req = new XMLHttpRequest();
             // req.open('POST', 'http://localhost:3000/saas3/dapi/submit', true);
             // req.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
@@ -60,8 +83,8 @@ const [error, setError] = useState("null");
             axios.post('https://rpc.saas3.io:3000/saas3/dapi/submit?address='+account,requestOptions.body ,{headers:{'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Methods' :'GET, POST' , 'Access-Control-Allow-Origin': '*'}})
               .then(function (response) {
                 const res = response['data'];
-                console.log(res);
-                  message.success('Your request have been created successfully, job ID: ' + res['data']['job'], 4);
+                  console.log(res);
+                  message.loading('Oracle Config Processing, job ID: #' + res['data']['job'], 0);
                   oracle_submitted = true;
                   return response;
               }).catch(function (error) {
@@ -88,11 +111,14 @@ const [error, setError] = useState("null");
             <TextArea  className='form_control'  style={{height:'80vh', display:'inline-flex'}} />
         </Form.Item>
 
-           <Button type="primary" className='wallet-button' style={{margin:"10px"}} onClick={connectWallet}>
+         <Form.Item wrapperCol={{ span: 15, offset: 3 }}>
+
+        <Input type="primary" style={{width:"7vw", margin:"1vw"}} maxLength={20} placeholder="Oralce Name" onChange={handleOracleChange}></Input> 
+        <Input type="primary" style={{width:"7vw", margin:"1vw"}} maxLength={10} placeholder="Creator Name" onChange={handleCreatorChange}></Input> 
+           <Button type="primary" className='wallet-button' style={{margin:"1vw"}} onClick={connectWallet}>
             Connect Polkadot Wallet
           </Button>
- 
-        <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
+
           <Button type="primary" htmlType="submit" className='button' disabled={!walletConnected}>
             Submit
           </Button>

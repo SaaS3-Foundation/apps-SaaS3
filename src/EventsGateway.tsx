@@ -1,10 +1,10 @@
 import { io } from 'socket.io-client';
 // import ProgressBar from 'react-bootstrap/ProgressBar';
-import { Button, message, Steps } from 'antd';
+import { Button, message, Steps, Modal } from 'antd';
 import type { SliderMarks } from 'antd/es/slider';
 import './App.css';
 import { useRef, useState } from 'react';
-import { LoadingOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import oracle_submitted from './EditComponent';
 
 
@@ -19,9 +19,9 @@ function EventsGateway() {
     };
 
     let now = 0;
-    console.log('websocket');
 
-    const socket = io('ws://rpc.saas3.io:3002');
+    console.log('websocket Failed');
+    const socket = io('wss://rpc.saas3.io:3002');
     socket.on('connect', function() {
       console.log('Connected');
     });
@@ -55,8 +55,26 @@ function EventsGateway() {
       if (data['status'] === 'DONE'){
         setReverse(9);
         if(finished==0){
-          message.success('Your oracle has been launched, please go to marketplace to share');
+          message.destroy()
+          message.success('Oracle Has been Submitted!');
           finished = 1;
+          Modal.confirm({
+              title: 'Congratulations',
+              icon: <ExclamationCircleOutlined />,
+              content: 'Your Oracle was Launched, Go to Marketplace to Find',
+              okText: 'Yes',
+              okType: 'primary',
+              cancelText: 'No',
+
+              onOk() {
+                window.location.href='https://saas3.io/marketplace';
+              },
+
+              onCancel() {
+                Modal.destroyAll();
+              },
+            });
+
         }
         finished = 1;
       }
