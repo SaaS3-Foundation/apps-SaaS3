@@ -21,7 +21,7 @@ function EventsGateway() {
     let now = 0;
     console.log('websocket');
 
-    const socket = io('http://rpc.saas3.io:3002');
+    const socket = io('https://rpc.saas3.io:3002');
     socket.on('connect', function() {
       console.log('Connected');
     });
