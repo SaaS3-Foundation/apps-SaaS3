@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 // import ProgressBar from 'react-bootstrap/ProgressBar';
-import { Steps } from 'antd';
+import { Button, Steps } from 'antd';
 import type { SliderMarks } from 'antd/es/slider';
 import './App.css';
 import { useRef, useState } from 'react';
@@ -11,6 +11,9 @@ const { Step } = Steps;
 function EventsGateway() {
     const [reverse, setReverse] = useState(0);
     const finish = useRef(null);
+    const marketplaceLink = () => {
+
+    };
 
     let now = 0;
     const socket = io('http://localhost:3002');

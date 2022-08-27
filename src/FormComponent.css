@@ -55,6 +55,17 @@
     line-height: 1.25;
     border-radius: 2px;
   }
+
+ .wallet-button{
+    color: #fff;
+    background-color: #3544c3;
+    border-color: #595c76;
+    border: 1px solid transparent;
+    font-size: 1rem;
+    line-height: 1.25;
+    border-radius: 2px;
+  }
+
   
   Select{
     background: white;

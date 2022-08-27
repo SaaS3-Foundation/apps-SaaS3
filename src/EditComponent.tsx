@@ -1,18 +1,34 @@
 import './FormComponent.css';
 import axios from 'axios';
-import React, { forwardRef, useImperativeHandle, useState } from 'react';
+import React, { forwardRef, useImperativeHandle, useState, useEffect, useRef} from 'react';
 import {
   Button,
   Form,
   Input,
   message,
 } from 'antd';
+import {web3Accounts, web3Enable} from "@polkadot/extension-dapp";
 
 
 const { TextArea } = Input;
-
+const walletConnected = false;
 
 function EditComponent() {
+
+const [accounts, setAccounts] = useRef({});
+const [error, setError] = useRef(null);
+
+    const connectWallet = async () => {
+      const extensions = await web3Enable('SaaS3 Oracle Launchpad');
+      if (extensions.length === 0) {
+          setError("No extension installed!");
+          return;
+      }
+      const accounts = await web3Accounts();
+      setAccounts(accounts);
+      console.log(accounts);
+    };
+  
 
     const [form] = Form.useForm();
     let requestOptions = {
@@ -22,6 +38,7 @@ function EditComponent() {
         },
         body: JSON.stringify({ title: 'React POST Request Example' })
     };
+
 
     const onFinish = () => {
         form.validateFields().then((value) => {
@@ -43,7 +60,6 @@ function EditComponent() {
                 console.log(error);
                 return error;
               });
-            
           });
     }
 
@@ -60,9 +76,13 @@ function EditComponent() {
         <Form.Item  name='content'>
             <TextArea  className='form_control'  style={{height:'80vh', display:'inline-flex'}} />
         </Form.Item>
-  
+
+           <Button type="primary" className='wallet-button' style={{margin:"10px"}} onClick={connectWallet}>
+            Connect Polkadot Wallet
+          </Button>
+ 
         <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
-          <Button type="primary" htmlType="submit" className='button'>
+          <Button type="primary" htmlType="submit" className='button' disabled={!walletConnected}>
             Submit
           </Button>
         </Form.Item>
