@@ -28,6 +28,7 @@ function EditComponent(props: any) {
   const [error, setError] = useState("null");
   const [oracleName, setOracleName] = useState('');
   const [creatorName, setCreatorName] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const connectWallet = async () => {
     const extensions = await web3Enable('Oracle Launchpad');
@@ -97,6 +98,7 @@ function EditComponent(props: any) {
           message.loading('Oracle Config Processing, job ID: #' + res['data']['job'], 0);
           oracle_submitted = true;
           onSubmit(res.data);
+          setLoading(true);
           return response;
         }).catch(function (error) {
           const err = error['response']['data'];
@@ -130,7 +132,7 @@ function EditComponent(props: any) {
           Connect Polkadot Wallet
         </Button>
 
-        <Button type="primary" htmlType="submit" className='button' disabled={!walletConnected}>
+        <Button type="primary" htmlType="submit" className='button' disabled={!walletConnected || loading}>
           Submit
         </Button>
       </Form.Item>
