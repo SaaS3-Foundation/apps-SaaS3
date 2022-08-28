@@ -14,8 +14,15 @@ let walletConnected = false;
 let oracle_submitted = false;
 
 function EditComponent(props: any) {
-  const {onSubmit} = props;
-  console.log(onSubmit);
+  const { onSubmit } = props;
+  // test on submit
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     // message.success('submit')
+  //     console.log('on-submit');
+  //     onSubmit({ job: 'ArzxfJ-DP8' });
+  //   }, 5000);
+  // }, [])
 
   const [account, setAccounts] = useState({});
   const [error, setError] = useState("null");
@@ -57,12 +64,12 @@ function EditComponent(props: any) {
   const onFinish = () => {
     form.validateFields().then((value) => {
 
-      if (oracleName.length == 0) {
+      if (!oracleName.length) {
         message.error('Oracle Name cannot be Empty!');
         return;
       }
 
-      if (creatorName.length == 0) {
+      if (!creatorName.length) {
         message.error('Creator Name cannot be Empty!');
         return;
       }
@@ -89,7 +96,7 @@ function EditComponent(props: any) {
           console.log(res);
           message.loading('Oracle Config Processing, job ID: #' + res['data']['job'], 0);
           oracle_submitted = true;
-          onSubmit(res);
+          onSubmit(res.data);
           return response;
         }).catch(function (error) {
           const err = error['response']['data'];

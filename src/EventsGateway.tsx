@@ -30,10 +30,13 @@ function EventsGateway(props: { submitData: any }) {
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    if (!submitData?.job) {
+      return;
+    }
     const _timer = setTimeout(async () => {
       let code = 0;
       try {
-        const ret = await getStatus({ id: submitData?.id || 'KHGniTZF2L' });
+        const ret = await getStatus({ id: submitData.job });
         const { status } = ret.data.data;
         code = (maps as any)[status];
       } catch (error) {
@@ -57,14 +60,15 @@ function EventsGateway(props: { submitData: any }) {
             Modal.destroyAll();
           },
         });
+        clearTimeout(_timer as NodeJS.Timeout);
         // setTimer(_timer);
       } else {
         setTimer(_timer);
       }
     }, 3000);
 
-    return () => clearTimeout(timer as NodeJS.Timeout);
-  }, [timer])
+    return () => clearTimeout(_timer as NodeJS.Timeout);
+  }, [timer, submitData])
 
   return (
     <Steps direction="vertical" size='small' current={reverse} onChange={(current) => {
