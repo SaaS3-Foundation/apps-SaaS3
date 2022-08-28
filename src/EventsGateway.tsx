@@ -1,103 +1,86 @@
-import { io } from 'socket.io-client';
-// import ProgressBar from 'react-bootstrap/ProgressBar';
-import { Button, message, Steps, Modal } from 'antd';
-import type { SliderMarks } from 'antd/es/slider';
+import { message, Steps, Modal } from 'antd';
 import './App.css';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
+import { getStatus } from './api/eventGateway'
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import oracle_submitted from './EditComponent';
 
 
 const { Step } = Steps;
-let finished=0;
+let finished = 0;
 
-function EventsGateway() {
-    const [reverse, setReverse] = useState(0);
-    const finish = useRef(null);
-    const marketplaceLink = () => {
+const maps = {
+  PENDING: 1,
+  GENERATING_DAPI_ADDRESS: 2,
+  GENERATING_DAPI_CONFIG: 3,
+  GENERATING_DAPI_SECRET: 4,
+  GENERATING_DAPI_CONTRACT: 5,
+  DEPLOYING_DAPI_CONTRACT: 6,
+  SPONSORING_DAPI_CONTRACT: 7,
+  DEPLOYING_DAPI: 8,
+  DONE: 9,
+};
 
-    };
+function EventsGateway(props: { submitData: any }) {
+  const { submitData } = props;
+  const [reverse, setReverse] = useState(0);
+  const finish = useRef(null);
+  const marketplaceLink = () => {
 
-    let now = 0;
+  };
+  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
 
-    console.log('websocket Failed');
-    const socket = io('wss://rpc.saas3.io:3002');
-    socket.on('connect', function() {
-      console.log('Connected');
-    });
-    socket.on('status', function(data: any) {
-      console.log('status', data);
-      now = data.progress;
-      if (data['status'] === 'PENDING'){
-        setReverse(1);
+  useEffect(() => {
+    const _timer = setTimeout(async () => {
+      let code = 0;
+      try {
+        const ret = await getStatus({ id: submitData?.id || 'KHGniTZF2L' });
+        const { status } = ret.data.data;
+        code = (maps as any)[status];
+      } catch (error) {
+        // message.error('');
       }
-      if (data['status'] === 'GENERATING_DAPI_ADDRESS'){
-        setReverse(2);
+      setReverse(code);
+      if (code === 9) {
+        message.destroy()
+        message.success('Oracle Has been Submitted!');
+        Modal.confirm({
+          title: 'Congratulations',
+          icon: <ExclamationCircleOutlined />,
+          content: 'Your Oracle was Launched, Go to Marketplace to Find',
+          okText: 'Yes',
+          okType: 'primary',
+          cancelText: 'No',
+          onOk() {
+            window.location.href = 'https://saas3.io/marketplace';
+          },
+          onCancel() {
+            Modal.destroyAll();
+          },
+        });
+        // setTimer(_timer);
+      } else {
+        setTimer(_timer);
       }
-      if (data['status'] === 'GENERATING_DAPI_CONFIG'){
-        setReverse(3);
-      }
-      if (data['status'] === 'GENERATING_DAPI_SECRET'){
-        setReverse(4);
-      }
-      if (data['status'] === 'GENERATING_DAPI_CONTRACT'){
-        setReverse(5);
-      }
-      if (data['status'] === 'DEPLOYING_DAPI_CONTRACT'){
-        setReverse(6);
-      }
-      if (data['status'] === 'SPONSORING_DAPI_CONTRACT'){
-        setReverse(7);
-      }
-      if (data['status'] === 'DEPLOYING_DAPI'){
-        setReverse(8);
-      }
-      if (data['status'] === 'DONE'){
-        setReverse(9);
-        if(finished==0){
-          message.destroy()
-          message.success('Oracle Has been Submitted!');
-          finished = 1;
-          Modal.confirm({
-              title: 'Congratulations',
-              icon: <ExclamationCircleOutlined />,
-              content: 'Your Oracle was Launched, Go to Marketplace to Find',
-              okText: 'Yes',
-              okType: 'primary',
-              cancelText: 'No',
+    }, 3000);
 
-              onOk() {
-                window.location.href='https://saas3.io/marketplace';
-              },
+    return () => clearTimeout(timer as NodeJS.Timeout);
+  }, [timer])
 
-              onCancel() {
-                Modal.destroyAll();
-              },
-            });
+  return (
+    <Steps direction="vertical" size='small' current={reverse} onChange={(current) => {
 
-        }
-        finished = 1;
-      }
-    });
-    socket.on('disconnect', function() {
-      console.log('Disconnected');
-    });
-
-    return (
-      <Steps direction="vertical" size='small' current={reverse} onChange={(current)=>{
-        
-        }}> 
-        <Step title="PENDING" />
-        <Step title="GENERATING_DAPI_ADDRESS" />
-        <Step title="GENERATING_DAPI_CONFIG" />
-        <Step title="GENERATING_DAPI_SECRET" />
-        <Step title="GENERATING_DAPI_CONTRACT" />
-        <Step title="DEPLOYING_DAPI_CONTRACT"  />
-        <Step title="SPONSORING_DAPI_CONTRACT" />
-        <Step title="DEPLOYING_DAPI" />
-        <Step title="DONE" ref={finish}/>
-      </Steps>
-    )
+    }}>
+      <Step title="PENDING" />
+      <Step title="GENERATING_DAPI_ADDRESS" />
+      <Step title="GENERATING_DAPI_CONFIG" />
+      <Step title="GENERATING_DAPI_SECRET" />
+      <Step title="GENERATING_DAPI_CONTRACT" />
+      <Step title="DEPLOYING_DAPI_CONTRACT" />
+      <Step title="SPONSORING_DAPI_CONTRACT" />
+      <Step title="DEPLOYING_DAPI" />
+      <Step title="DONE" ref={finish} />
+    </Steps>
+  )
     ;
 }
 export default EventsGateway;
