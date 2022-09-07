@@ -1,98 +1,109 @@
+.form_control {
+  display: block;
+  width: 80%;
+  height: calc(1rem + 2px);
+  padding: 0.5rem 0.75rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 400;
+  line-height: 1.25;
+  color: #dfe1ea !important;
+  background-color: #35384c !important;
+  background-clip: padding-box;
+  border: none !important;
+  border-radius: 2px !important;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  -webkit-appearance: none !important;
+  margin-block-end: 1rem;
+}
 
-.form_control{
-    display: block;
-    width: 80%;
-    height: calc(1rem + 2px);
-    padding: 0.5rem 0.75rem !important;
-    font-size: 0.875rem !important;
-    font-weight: 400;
-    line-height: 1.25;
-    color: #dfe1ea !important;
-    background-color: #35384c !important;
-    background-clip: padding-box;
-    border: none !important;
-    border-radius: 2px !important;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    -webkit-appearance: none !important;
-    margin-block-end: 1rem;
-  }
-  
-  label{
-    margin-top: 0.5rem !important;
-    font: 14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: #A2A3BD;
-  }
-  
-  .flex-column{
-    flex-direction: column !important;
-    font-size: 1rem;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: 500;
-    line-height: 1.1;
-    color: #fff;
-    align-items: center;
-    justify-content: space-between;
-    text-transform: uppercase;
-    padding-left: 1rem !important;
-    padding-top: 1rem !important;
-    height: 3rem;
-  }
-  
-  Form {
-    margin-left: 2rem;
-  }
-  
-  .ant-form-item{
-    margin-block-end: 1rem;
-  }
-  
-  .button{
-    color: #fff;
-    background-color: #595c76;
-    border-color: #595c76;
-    border: 1px solid transparent;
-    font-size: 1rem;
-    line-height: 1.25;
-    border-radius: 2px;
-  }
+label {
+  margin-top: 0.5rem !important;
+  font: 14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #A2A3BD;
+}
 
- .wallet-button{
-    color: #fff;
-    background-color: #3544c3;
-    border-color: #595c76;
-    border: 1px solid transparent;
-    font-size: 1rem;
-    line-height: 1.25;
-    border-radius: 2px;
-  }
+.flex-column {
+  flex-direction: column !important;
+  font-size: 1rem;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  line-height: 1.1;
+  color: #fff;
+  align-items: center;
+  justify-content: space-between;
+  text-transform: uppercase;
+  padding-left: 1rem !important;
+  padding-top: 1rem !important;
+  height: 3rem;
+}
 
-  
-  Select{
-    background: white;
-  }
-  
-  .ant-select{
-    display: flex;
-    align-items: center;
+Form {
+  margin-left: 2rem;
+}
 
-  }
-  
-  .ant-select-selector{
-    background-color: #595c76;
-    color: white;
-    height: 38px;
-    display: flex;
-    align-items: center;
-  }
-  .ant-select-selection-search{
-    /* background-color: #595c76;
+.ant-form-item {
+  margin-block-end: 1rem;
+}
+
+.button {
+  color: #fff;
+  background-color: #595c76;
+  border-color: #595c76;
+  border: 1px solid transparent;
+  font-size: 1rem;
+  line-height: 1.25;
+  border-radius: 2px;
+}
+
+.wallet-button {
+  color: #fff;
+  background-color: #3544c3;
+  border-color: #595c76;
+  border: 1px solid transparent;
+  font-size: 1rem;
+  line-height: 1.25;
+  border-radius: 2px;
+}
+
+
+Select {
+  background: white;
+}
+
+.ant-select {
+  display: flex;
+  align-items: center;
+
+}
+
+.ant-select-selector {
+  background-color: #595c76;
+  color: white;
+  height: 38px;
+  display: flex;
+  align-items: center;
+}
+
+.ant-select-selection-search {
+  /* background-color: #595c76;
     color: white; */
-  }
-  /* .ant-select-arrow{
+}
+
+/* .ant-select-arrow{
     background-color: #595c76;
   } */
-  .ant-select-dropdown-menu {
-    background: #1F1F26;
-    border: solid 1px #32323a;
-    color: #fff !important;
-    }
+.ant-select-dropdown-menu {
+  background: #1F1F26;
+  border: solid 1px #32323a;
+  color: #fff !important;
+}
+
+.context-form-item>div {
+  height: 100%;
+}
+
+.context-form-item>div>div,
+.context-form-item>div>div>.ant-form-item-control-input,
+.context-form-item>div>div>.ant-form-item-control-input>.ant-form-item-control-input-content {
+  height: 100%;
+}

@@ -1,4 +1,5 @@
 @import '~antd/dist/antd.css';
+
 .App {
   text-align: center;
 }
@@ -7,16 +8,16 @@
   background-color: #222336;
   display: flex;
   flex-direction: row;
-  align-items: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  height: 100vh;
 }
 
-.iconpanel .anticon{
+.iconpanel .anticon {
   margin-top: 1vh;
 }
 
-.iconpanel{
+.iconpanel {
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -25,11 +26,12 @@
   height: 100vh;
 }
 
-.iconpanel img:hover{
-  cursor:pointer;
+.iconpanel img:hover {
+  cursor: pointer;
 }
-.iconpanel img{
-  margin:10px;
+
+.iconpanel img {
+  margin: 10px;
 }
 
 
@@ -38,6 +40,7 @@
 }
 
 .sidepanel {
+  height: 100%;
   display: flex;
   /* flex-direction: row-reverse; */
   /* min-height: 100vh; */
@@ -53,17 +56,17 @@
   border-right: 1px solid #3f4455 !important;
 }
 
-.ant-steps-vertical.ant-steps-small .ant-steps-item-container .ant-steps-item-title{
-  color:white
+.ant-steps-vertical.ant-steps-small .ant-steps-item-container .ant-steps-item-title {
+  color: white
 }
 
-.panelleft{
+.panelleft {
   display: flex;
   flex-direction: row;
   justify-content: center;
   padding: 3rem;
 }
 
-.flex-column{
+.flex-column {
   padding: 30px;
 }

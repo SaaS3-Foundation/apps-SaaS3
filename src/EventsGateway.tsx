@@ -37,7 +37,7 @@ function EventsGateway(props: { submitData: any }) {
       let code = 0;
       try {
         const ret = await getStatus({ id: submitData.job });
-        const { status } = ret.data.data;
+        const { status } = ret.data;
         code = (maps as any)[status];
       } catch (error) {
         // message.error('');

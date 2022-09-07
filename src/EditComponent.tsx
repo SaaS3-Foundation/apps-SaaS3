@@ -1,57 +1,35 @@
 import './FormComponent.css';
-import axios from 'axios';
-import React, { forwardRef, useImperativeHandle, useState, useEffect, useRef, ReactPropTypes } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Button,
   Form,
   Input,
   message,
 } from 'antd';
-import { web3Accounts, web3Enable } from "@polkadot/extension-dapp";
+import { web3Context } from './provider/web3';
+import { submit } from './api/eventGateway';
+
 
 const { TextArea } = Input;
-let walletConnected = false;
-let oracle_submitted = false;
-
 function EditComponent(props: any) {
   const { onSubmit } = props;
-  // test on submit
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     // message.success('submit')
-  //     console.log('on-submit');
-  //     onSubmit({ job: 'ArzxfJ-DP8' });
-  //   }, 5000);
-  // }, [])
-
-  const [account, setAccounts] = useState({});
   const [error, setError] = useState("null");
   const [oracleName, setOracleName] = useState('');
   const [creatorName, setCreatorName] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const { connect, account } = useContext(web3Context);
+
   const connectWallet = async () => {
-    const extensions = await web3Enable('Oracle Launchpad');
-    if (extensions.length === 0) {
-      message.error("Please install polkadot wallet extension")
-      return;
+    try {
+      await connect();
+    } catch (error) {
+
     }
-    const accounts = await web3Accounts();
-    setAccounts(accounts[0]['address']);
-    walletConnected = true;
-    message.success("Connect Success");
   };
 
 
   const [form] = Form.useForm();
-  let requestOptions = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'text/plain',
-      //  'Access-Control-Allow-Methods' :'GET, POST' , 'Access-Control-Allow-Origin': '*'
-    },
-    body: JSON.stringify({ title: 'React POST Request Example' })
-  };
 
   const handleOracleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setOracleName(event.target.value);
@@ -63,7 +41,8 @@ function EditComponent(props: any) {
 
 
   const onFinish = () => {
-    form.validateFields().then((value) => {
+    form.validateFields().then(async (value) => {
+      console.log(value);
 
       if (!oracleName.length) {
         message.error('Oracle Name cannot be Empty!');
@@ -76,43 +55,27 @@ function EditComponent(props: any) {
       }
 
       try {
-        let requestConfig = JSON.parse(value['content']);
-        requestConfig['title'] = oracleName;
-        requestConfig['creator'] = creatorName;
-        requestOptions.body = JSON.stringify(requestConfig);
-      } catch {
-        message.error('Invalid Oracle Config');
+        const requestConfig = JSON.parse(value['content']);
+        setLoading(true);
+        const ret = await submit({
+          address: account,
+        }, { ...requestConfig, title: oracleName, creator: creatorName })
+        console.log(ret);
+        message.loading('Oracle Config Processing, job ID: #' + ret.data.job, 0);
+        onSubmit(ret.data);
+      } catch (error: any) {
+        console.log(error);
+
+        message.error(error.msg || 'Invalid Oracle Config');
+        setLoading(false);
         return;
       }
-
-      console.log(requestOptions.body);
-
-      // let req = new XMLHttpRequest();
-      // req.open('POST', 'http://localhost:3000/saas3/dapi/submit', true);
-      // req.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-      // req.send(data);
-      axios.post('https://rpc.saas3.io:3000/saas3/dapi/submit?address=' + account, requestOptions.body, { headers: { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Methods': 'GET, POST', 'Access-Control-Allow-Origin': '*' } })
-        .then(function (response) {
-          const res = response['data'];
-          console.log(res);
-          message.loading('Oracle Config Processing, job ID: #' + res['data']['job'], 0);
-          oracle_submitted = true;
-          onSubmit(res.data);
-          setLoading(true);
-          return response;
-        }).catch(function (error) {
-          const err = error['response']['data'];
-          console.log(err);
-          oracle_submitted = false;
-          message.error(err['msg']);
-          return error;
-        });
     });
   }
 
   return (
     <Form
-      style={{ textAlign: 'center' }}
+      style={{ textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column' }}
       form={form}
       onFinish={onFinish}
       initialValues={{
@@ -120,19 +83,26 @@ function EditComponent(props: any) {
       }}
     >
 
-      <Form.Item name='content'>
-        <TextArea className='form_control' style={{ height: '80vh', display: 'inline-flex' }} />
+      <Form.Item name='content' style={{ flex: 1 }} className="context-form-item">
+        <TextArea className='form_control' style={{ display: 'inline-flex', height: '100%' }} />
       </Form.Item>
 
       <Form.Item wrapperCol={{ span: 15, offset: 3 }}>
+        {
+          !account ? <Button
+            type="primary"
+            className='wallet-button'
+            style={{ margin: "1vw" }}
+            onClick={connectWallet}>
+            Connect Wallet
+          </Button> : <span style={{ color: 'white' }}>{account}</span>
+        }
 
-        <Input type="primary" style={{ width: "7vw", margin: "1vw" }} maxLength={20} placeholder="Oralce Name" onChange={handleOracleChange}></Input>
-        <Input type="primary" style={{ width: "7vw", margin: "1vw" }} maxLength={10} placeholder="Creator Name" onChange={handleCreatorChange}></Input>
-        <Button type="primary" className='wallet-button' style={{ margin: "1vw" }} onClick={connectWallet}>
-          Connect Polkadot Wallet
-        </Button>
+        <Input type="primary" style={{ width: "200px", margin: "1vw" }} maxLength={20} placeholder="Oralce Name" onChange={handleOracleChange}></Input>
+        <Input type="primary" style={{ width: "200px", margin: "1vw" }} maxLength={10} placeholder="Creator Name" onChange={handleCreatorChange}></Input>
 
-        <Button type="primary" htmlType="submit" className='button' disabled={!walletConnected || loading}>
+
+        <Button type="primary" htmlType="submit" className='button' disabled={!account || loading}>
           Submit
         </Button>
       </Form.Item>
