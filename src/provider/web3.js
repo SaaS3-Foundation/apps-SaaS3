@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from 'react';
 import Web3 from 'web3/dist/web3.min';
-import { notification, message } from 'antd';
-import { switchNetwork } from '../utils/web3';
+import { message, notification } from 'antd';
+import { getCurrChainInfo, switchNetwork } from '../utils/web3';
 
 const web3 = new Web3();
 
@@ -24,15 +24,44 @@ function Web3Provider(props) {
     return _provider;
   };
 
-  const fetchSetAccount = async () => {
-    const res = await web3.eth.getAccounts();
-    setAccount(res[0]);
-    await fetchSetChain();
+  const fetchSetAccount = () => {
+    web3.eth.getAccounts().then((accounts) => {
+      setAccount(accounts[0]);
+    });
+    fetchSetChain();
   };
 
   const fetchSetChain = async () => {
-    const res = await web3.eth.getChainId();
-    setChainId(res);
+    const chainId = await web3.eth.getChainId();
+    if (web3.utils.toHex(chainId) !== getCurrChainInfo().chainId) {
+      message.error('Place switch network to ' + getCurrChainInfo().chainId);
+      disconnect();
+      return;
+    }
+    setChainId(chainId);
+  };
+
+  const disconnect = () => {
+    setChainId('');
+    setAccount('');
+    _setProvider(null);
+    removeListener();
+  };
+
+  const addListener = () => {
+    removeListener();
+    console.log('add listener');
+    provider.on('accountsChanged', fetchSetAccount);
+    provider.on('disconnect', disconnect);
+    provider.on('chainChanged', fetchSetAccount);
+  };
+
+  const removeListener = () => {
+    try {
+      provider.removeListener('accountsChanged', fetchSetAccount);
+      provider.removeListener('disconnect', disconnect);
+      provider.removeListener('chainChanged', fetchSetAccount);
+    } catch (error) {}
   };
 
   const connect = async () => {
@@ -63,32 +92,12 @@ function Web3Provider(props) {
   };
 
   useEffect(() => {
-    const addListener = () => {
-      console.log('add listener');
-      provider.on('connect', () => {});
-      provider.on('accountsChanged', () => {
-        fetchSetAccount();
-      });
-      provider.on('disconnect', () => {
-        setChainId('');
-        setAccount('');
-        setProvider(null);
-      });
-      provider.on('chainChanged', () => {
-        fetchSetAccount();
-      });
-    };
     if (provider) {
       fetchSetAccount();
       addListener();
     }
     return () => {
-      try {
-        provider.removeListener('connect');
-        provider.removeListener('accountsChanged');
-        provider.removeListener('disconnect');
-        provider.removeListener('chainChanged');
-      } catch (error) {}
+      removeListener();
     };
   }, [provider]);
 
@@ -100,7 +109,8 @@ function Web3Provider(props) {
         chainId,
         account,
         setProvider: _setProvider,
-        connect
+        connect,
+        disconnect
       }}
     >
       {props.children}
